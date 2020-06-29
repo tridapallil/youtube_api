@@ -48,13 +48,19 @@ and on the eighth day the last one will be watched [15].
 ```
 yarn install
 ```
+With docker installed, create and start a docker server, to mongo and redis
+```
+docker run --name mongoserver -p 27017:27017 -d -t mongo
+```
+```
+docker run --name redisserver -p 6379:6379 -d -t redis:alpine
+```
+Then you can start your api
 ```
 yarn dev
 ```
 ***The project will be running on http://localhost:3333
 
-### Directory Structure
-
 
 ### Considerations
-
+For next features, i would implement tests and made all the project run with docker.
