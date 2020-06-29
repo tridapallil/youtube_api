@@ -31,6 +31,5 @@ routes.get('/watched', WatchedController.index);
 routes.get('/watch', WatchController.index);
 routes.get('/weeks', WeekController.index);
 routes.put('/weeks', WeekController.update);
-// routes.put('/users', UserController.update);
 
 export default routes;
