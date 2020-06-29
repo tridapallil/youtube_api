@@ -8,7 +8,6 @@ api.interceptors.request.use(config => {
   config.params = {
     ...config.params,
     key: process.env.API_KEY,
-    chart: 'mostPopular',
   };
   return config;
 });

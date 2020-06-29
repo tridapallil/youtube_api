@@ -3,7 +3,7 @@ import Week from '../schemas/Week';
 
 class WeekController {
   async index(req, res) {
-    const weeks = await Week.find({ userId: req.userId });
+    const weeks = await Week.findOne({ userId: req.userId });
 
     return res.json(weeks);
   }
@@ -32,6 +32,7 @@ class WeekController {
 
   async store(req, res) {
     const schema = Yup.object().shape({
+      userId: Yup.string().required(),
       sunday: Yup.number().required(),
       monday: Yup.number().required(),
       tuesday: Yup.number().required(),
@@ -47,7 +48,7 @@ class WeekController {
         .json({ error: true, message: 'Validation fails.' });
     }
 
-    const weekExists = await Week.findOne({ userId: req.userId });
+    const weekExists = await Week.findOne({ userId: req.body.userId });
 
     if (weekExists) {
       return res.status(400).json({
@@ -56,26 +57,7 @@ class WeekController {
       });
     }
 
-    const {
-      sunday,
-      monday,
-      tuesday,
-      wednesday,
-      thursday,
-      friday,
-      saturday,
-    } = req.body;
-
-    const week = await Week.create({
-      userId: req.userId,
-      sunday,
-      monday,
-      tuesday,
-      wednesday,
-      thursday,
-      friday,
-      saturday,
-    });
+    const week = await Week.create(req.body);
 
     return res.json(week);
   }

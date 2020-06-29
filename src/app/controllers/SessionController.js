@@ -1,8 +1,10 @@
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
 import * as Yup from 'yup';
 
 import authConfig from '../../config/auth';
+import Session from '../schemas/Session';
 import User from '../schemas/User';
 
 class SessionController {
@@ -24,6 +26,10 @@ class SessionController {
 
     const user = await User.findOne({ email });
 
+    if (!user) {
+      return res.status(401).json({ error: true, message: 'User not found.' });
+    }
+
     const login = await bcrypt.compare(password, user.password);
 
     if (!login) {
@@ -32,16 +38,33 @@ class SessionController {
         .json({ error: true, message: 'Email or user invalid.' });
     }
 
-    if (!user) {
-      return res.status(401).json({ error: true, message: 'User not found.' });
-    }
+    const date = new Date();
+
+    const session = await Session.create({ userId: user.id });
 
     const id = user._id;
 
+    const totalHours = moment
+      .duration(
+        moment(date)
+          .endOf('day')
+          .diff(moment())
+      )
+      .hours();
+    const totalMinutes = moment
+      .duration(
+        moment(date)
+          .endOf('day')
+          .diff(moment())
+      )
+      .minutes();
+
     return res.json({
       user,
+      session,
+      sessionTime: `${totalHours * 60 + totalMinutes} minutes`,
       token: jwt.sign({ id }, authConfig.secret, {
-        expiresIn: authConfig.expiresIn,
+        expiresIn: `${totalHours * 60 + totalMinutes} minutes`,
       }),
     });
   }
