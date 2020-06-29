@@ -43,7 +43,7 @@ and on the eighth day the last one will be watched [15].
 
 ***Clone the project
 
-***Create .env file and put all the global variables values
+***Create .env file and put all the global variables values (at this project, i let the .env file to make it easier)
 
 ```
 yarn install
