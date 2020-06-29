@@ -59,7 +59,7 @@ class VideoController {
             week.saturday
           )}M0S`
         );
-        while (arrResponse.length < 10) {
+        while (arrResponse.length < 200) {
           let ids = '';
           // eslint-disable-next-line no-await-in-loop
           const response = await api
